@@ -1,0 +1,26 @@
+{% extends 'base.html' %}
+{% block title %}Mis compras | Auto Cars{% endblock %}
+{% block content %}
+<section class="section container narrow-content">
+	<p class="eyebrow">Historial</p>
+	<h1>Mis compras<span>.</span></h1>
+	<p class="page-intro">Tu historial de vehículos adquiridos en Auto Cars.</p>
+	{% if purchases %}
+		<div class="purchase-list">
+			{% for purchase in purchases %}
+				{% set car = cars.get(purchase.car_id) %}
+				<article class="purchase-item">
+					<div>
+						<p class="card-meta">Compra #{{ purchase.id }}</p>
+						<h2>{{ car.brand }} {{ car.model }}</h2>
+						<p>Año {{ car.year }} · {{ purchase.purchase_date.strftime('%d/%m/%Y') }}</p>
+					</div>
+					<strong>${{ "{:,.0f}".format(purchase.price) }}</strong>
+				</article>
+			{% endfor %}
+		</div>
+	{% else %}
+		<p class="empty-state">No tienes compras realizadas.</p>
+	{% endif %}
+</section>
+{% endblock %}

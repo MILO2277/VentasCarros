@@ -1,0 +1,20 @@
+{% extends 'base.html' %}
+{% block title %}Carros | Auto Cars{% endblock %}
+{% block content %}
+<section class="section container">
+	<div class="section-heading">
+		<div>
+			<p class="eyebrow">Nuestro inventario</p>
+			<h1>Encuentra tu próximo carro.</h1>
+		</div>
+		<p class="inventory-note">{{ cars|length }} vehículos en nuestro inventario</p>
+	</div>
+	<div class="car-grid">
+		{% for car in cars %}
+			{% include 'user/_car_card.html' %}
+		{% else %}
+			<p class="empty-state">Todavía no hay carros registrados.</p>
+		{% endfor %}
+	</div>
+</section>
+{% endblock %}

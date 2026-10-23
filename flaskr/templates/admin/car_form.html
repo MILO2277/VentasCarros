@@ -1,0 +1,44 @@
+{% extends 'base.html' %}
+{% block title %}{{ title }} | Auto Cars{% endblock %}
+{% block content %}
+<section class="form-section">
+	<div class="form-card form-card-wide">
+		<p class="eyebrow">Administración</p>
+		<h1>{{ title }}<span>.</span></h1>
+		<form method="post" enctype="multipart/form-data" class="stack-form">
+			<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+			<label for="brand">Marca</label>
+			<input id="brand" name="brand" type="text" value="{{ car.brand if car else '' }}" required>
+			<label for="model">Modelo</label>
+			<input id="model" name="model" type="text" value="{{ car.model if car else '' }}" required>
+			<div class="form-grid">
+				<div><label for="year">Año</label><input id="year" name="year" type="number" value="{{ car.year if car else '' }}" required></div>
+				<div><label for="price">Precio</label><input id="price" name="price" type="number" min="0" step="0.01" value="{{ car.price if car else '' }}" required></div>
+			</div>
+			<label for="description">Descripción</label>
+			<textarea id="description" name="description" rows="4" required>{{ car.description if car else '' }}</textarea>
+			<label for="image_file">Seleccionar imagen</label>
+			<input id="image_file" name="image_file" type="file" accept=".jpg,.jpeg,.png,.webp,image/jpeg,image/png,image/webp" {% if not car %}required{% endif %}>
+			<div class="image-upload-preview" {% if not car or not car.image %}hidden{% endif %}>
+				<img id="image-preview" src="{{ image_url(car.image) if car else '' }}" alt="Vista previa de la imagen del vehículo">
+				<span id="image-preview-label">{% if car %}Imagen actual{% endif %}</span>
+			</div>
+			<label class="checkbox-label"><input name="available" type="checkbox" {% if not car or car.available %}checked{% endif %}> Disponible</label>
+			<div class="action-row"><button class="button button-primary" type="submit">Guardar cambios <span aria-hidden="true">↗</span></button><a class="button button-outline" href="{{ url_for('admin.cars') }}">Cancelar</a></div>
+		</form>
+	</div>
+</section>
+<script>
+	const imageInput = document.getElementById('image_file');
+	const preview = document.getElementById('image-preview');
+	const previewLabel = document.getElementById('image-preview-label');
+	const previewContainer = document.querySelector('.image-upload-preview');
+	imageInput.addEventListener('change', () => {
+		const file = imageInput.files[0];
+		if (!file) return;
+		preview.src = URL.createObjectURL(file);
+		previewLabel.textContent = file.name;
+		previewContainer.hidden = false;
+	});
+</script>
+{% endblock %}

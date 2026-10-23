@@ -1,0 +1,51 @@
+<!doctype html>
+<html lang="es">
+<head>
+	<meta charset="utf-8">
+	<meta name="viewport" content="width=device-width, initial-scale=1">
+	<title>{% block title %}Auto Cars{% endblock %}</title>
+	<link rel="stylesheet" href="{{ url_for('static', filename='css/style.css') }}">
+</head>
+<body>
+	<header class="site-header">
+		<nav class="navbar container">
+			<a class="brand" href="{{ url_for('user.home_public') }}"><span class="brand-mark">A</span><span class="brand-name">AUTO CARS</span></a>
+			<div class="nav-links">
+				{% if current_user and current_user.role.value == 'ADMIN' %}
+					<span class="nav-label">ADMINISTRACIÓN</span>
+					<a href="{{ url_for('admin.dashboard') }}">Dashboard</a>
+					<a href="{{ url_for('admin.cars') }}">Carros</a>
+					<form class="nav-logout" method="post" action="{{ url_for('auth.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit">Cerrar sesión <span aria-hidden="true">↗</span></button></form>
+				{% elif current_user %}
+					<a href="{{ url_for('user.home_public') }}">Inicio</a>
+					<a href="{{ url_for('user.cars') }}">Carros</a>
+					<a href="{{ url_for('user.purchases') }}">Mis compras</a>
+					<form class="nav-logout" method="post" action="{{ url_for('auth.logout') }}"><input type="hidden" name="csrf_token" value="{{ csrf_token() }}"><button type="submit">Cerrar sesión <span aria-hidden="true">↗</span></button></form>
+				{% else %}
+					<a href="{{ url_for('user.home_public') }}">Inicio</a>
+					<a href="{{ url_for('user.cars') }}">Carros</a>
+					<a href="{{ url_for('auth.login') }}">Iniciar sesión</a>
+					<a class="nav-accent" href="{{ url_for('auth.register') }}">Registrarse <span aria-hidden="true">↗</span></a>
+				{% endif %}
+			</div>
+		</nav>
+	</header>
+
+	<main>
+		{% with messages = get_flashed_messages(with_categories=true) %}
+			{% if messages %}
+				<div class="container flash-stack">
+					{% for category, message in messages %}
+						<div class="flash {{ category }}">{{ message }}</div>
+					{% endfor %}
+				</div>
+			{% endif %}
+		{% endwith %}
+		{% block content %}{% endblock %}
+	</main>
+
+	<footer class="site-footer">
+		<div class="container">Auto Cars · Catálogo académico de vehículos</div>
+	</footer>
+</body>
+</html>

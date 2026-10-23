@@ -1,0 +1,43 @@
+{% extends 'base.html' %}
+{% block title %}Inicio | Auto Cars{% endblock %}
+{% block content %}
+<section class="hero">
+	<div class="container hero-grid">
+		<div class="hero-content">
+			<div class="hero-kicker"><span></span> CONCESIONARIO DIGITAL</div>
+			{% if current_user %}
+				<p class="eyebrow">Tu espacio en Auto Cars</p>
+				<h1>Bienvenido,<br><em>{{ current_user.name }}</em></h1>
+			{% else %}
+				<p class="eyebrow">Vehículos seleccionados</p>
+				<h1>Encuentra el carro<br><em>que te mueve.</em></h1>
+			{% endif %}
+			<p class="hero-description">Explora una selección de vehículos elegidos para acompañar tus próximos kilómetros.</p>
+			<a class="button button-primary" href="{{ url_for('user.cars') }}">Explorar inventario <span aria-hidden="true">↗</span></a>
+		</div>
+		{% if cars %}
+			<div class="hero-vehicle">
+				<div class="hero-vehicle-image"><img src="{{ image_url(cars[0].image) }}" alt="{{ cars[0].brand }} {{ cars[0].model }} {{ cars[0].year }}"></div>
+				<div class="hero-vehicle-caption"><span>DESTACADO</span><strong>{{ cars[0].brand }} {{ cars[0].model }}</strong><small>{{ cars[0].year }} · Disponible ahora</small></div>
+			</div>
+		{% endif %}
+	</div>
+</section>
+
+<section class="section container">
+	<div class="section-heading">
+		<div>
+			<p class="eyebrow">Selección Auto Cars</p>
+			<h2>Tu próximo carro<br><em>empieza aquí.</em></h2>
+		</div>
+		<a class="text-link" href="{{ url_for('user.cars') }}">Ver inventario completo <span aria-hidden="true">↗</span></a>
+	</div>
+	<div class="car-grid">
+		{% for car in cars if car.available %}
+			{% include 'user/_car_card.html' %}
+		{% else %}
+			<p class="empty-state">No hay carros disponibles en este momento.</p>
+		{% endfor %}
+	</div>
+</section>
+{% endblock %}

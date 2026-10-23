@@ -1,0 +1,27 @@
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+    function signedIn() {
+      return request.auth != null;
+    }
+
+    function isAdmin() {
+      return signedIn() && request.auth.token.admin == true;
+    }
+
+    match /cars/{carId} {
+      allow read: if signedIn();
+      allow create, update, delete: if isAdmin();
+    }
+
+    // Flask uses server-side sessions; these records are accessed only by its Admin SDK.
+    match /users/{userId} {
+      allow read, write: if false;
+    }
+
+    // Purchase user IDs are Flask account IDs, not Firebase Authentication UIDs.
+    match /purchases/{purchaseId} {
+      allow read, write: if false;
+    }
+  }
+}

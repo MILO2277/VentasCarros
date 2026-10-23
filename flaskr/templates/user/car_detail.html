@@ -1,0 +1,30 @@
+{% extends 'base.html' %}
+{% block title %}{{ car.brand }} {{ car.model }} | Auto Cars{% endblock %}
+{% block content %}
+<section class="section container">
+	<a class="back-link" href="{{ url_for('user.cars') }}">← Volver al inventario</a>
+	<div class="detail-layout">
+		<img class="detail-image" src="{{ image_url(car.image) }}" alt="{{ car.brand }} {{ car.model }} {{ car.year }}">
+		<div class="detail-copy">
+			<div class="detail-tag">{{ car.brand }} / {{ car.year }}</div>
+			<h1>{{ car.model }}<span>.</span></h1>
+			<p class="detail-year">Año {{ car.year }}</p>
+			<p class="detail-price">${{ "{:,.0f}".format(car.price) }}</p>
+			<div class="detail-rule"></div><h2>Sobre el vehículo</h2>
+			<p>{{ car.description }}</p>
+			{% if car.available %}
+				{% if current_user and current_user.role.value == 'USER' %}
+					<form method="post" action="{{ url_for('user.buy_car', car_id=car.id) }}">
+						<input type="hidden" name="csrf_token" value="{{ csrf_token() }}">
+						<button class="button button-primary" type="submit">Comprar carro <span aria-hidden="true">↗</span></button>
+					</form>
+				{% elif not current_user %}
+					<a class="button button-primary" href="{{ url_for('auth.login') }}">Inicia sesión para comprar</a>
+				{% endif %}
+			{% else %}
+				<span class="status status-sold">No disponible</span>
+			{% endif %}
+		</div>
+	</div>
+</section>
+{% endblock %}

@@ -1,0 +1,16 @@
+{% extends 'base.html' %}
+{% block title %}Dashboard | Auto Cars{% endblock %}
+{% block content %}
+<section class="section container admin-header">
+	<p class="eyebrow">Administración</p>
+	<h1>Panel de<br><em>administración.</em></h1>
+	<div class="admin-summary">
+		<span class="summary-number">{{ cars_count }}</span>
+		<span>Carros registrados</span>
+	</div>
+	<div class="action-row">
+		<a class="button button-primary" href="{{ url_for('admin.cars') }}">Ver inventario <span aria-hidden="true">↗</span></a>
+		<a class="button button-outline" href="{{ url_for('admin.create_car') }}">Agregar carro <span aria-hidden="true">+</span></a>
+	</div>
+</section>
+{% endblock %}

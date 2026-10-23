@@ -1,0 +1,10 @@
+{% extends 'base.html' %}
+{% block title %}Imagen demasiado grande | Auto Cars{% endblock %}
+{% block content %}
+<section class="section container">
+	<p class="eyebrow">Carga de imagen</p>
+	<h1>El archivo supera el límite<span>.</span></h1>
+	<p>Selecciona una imagen de máximo 5 MB.</p>
+	<a class="button button-primary" href="{{ url_for('admin.create_car') }}">Volver al formulario</a>
+</section>
+{% endblock %}

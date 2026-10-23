@@ -1,0 +1,14 @@
+<article class="car-card">
+    <div class="car-card-image"><img src="{{ image_url(car.image) }}" alt="{{ car.brand }} {{ car.model }} {{ car.year }}" loading="lazy"><span class="card-year">{{ car.year }}</span></div>
+    <div class="car-card-body">
+        <div class="card-meta">{{ car.brand }}</div>
+        <h3>{{ car.model }}</h3>
+        <div class="card-footer"><p class="price">${{ "{:,.0f}".format(car.price) }}</p>
+        {% if car.available %}
+            <a class="card-arrow" href="{{ url_for('user.car_detail', car_id=car.id) }}" aria-label="Ver detalle de {{ car.brand }} {{ car.model }}">↗</a>
+        {% else %}
+            <span class="status status-sold">No disponible</span>
+        {% endif %}
+        </div>
+    </div>
+</article>
